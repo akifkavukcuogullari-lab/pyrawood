@@ -9,14 +9,13 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD:-pyrawood_secret}
     volumes:
       - pgdata:/var/lib/postgresql/data
-    # No ports exposed — only accessible by backend via Docker network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U pyrawood"]
       interval: 5s
       timeout: 5s
       retries: 5
 
-  # Backend API
+  # Backend API — exposed on port 8081
   backend:
     build:
       context: ./backend
@@ -36,27 +35,27 @@ services:
       RUN_MIGRATIONS: "true"
       RUN_SEEDS: "true"
     ports:
-      - "127.0.0.1:3001:3001"
+      - "8081:3001"
     volumes:
       - uploads:/app/uploads
 
-  # Frontend (Next.js)
+  # Frontend (Next.js) — exposed on port 8080
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://129.212.133.64:8080/api}
+        - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://129.212.133.64:8081/api}
     restart: unless-stopped
     depends_on:
       - backend
     environment:
-      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://129.212.133.64:8080/api}
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://129.212.133.64:8081/api}
       NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:-pk_test_placeholder}
       NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-http://129.212.133.64:8080}
       NEXT_PUBLIC_SITE_NAME: Pyra Wood
     ports:
-      - "127.0.0.1:3000:3000"
+      - "8080:3000"
 
 volumes:
   pgdata:
