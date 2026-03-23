@@ -1,0 +1,78 @@
+{
+  "suites": [
+    {
+      "name": "Backend Unit Tests",
+      "path": "backend",
+      "command": "npm run test:unit",
+      "category": "unit"
+    },
+    {
+      "name": "Backend Integration Tests",
+      "path": "backend",
+      "command": "npm run test:integration",
+      "category": "integration"
+    },
+    {
+      "name": "Frontend Unit Tests",
+      "path": "frontend",
+      "command": "npm test -- --passWithNoTests",
+      "category": "unit"
+    },
+    {
+      "name": "Frontend E2E Tests",
+      "path": "frontend",
+      "command": "npx playwright test",
+      "category": "e2e"
+    }
+  ],
+  "features": {
+    "auth": {
+      "tests": [
+        "backend/__tests__/unit/services/auth.test.ts",
+        "backend/__tests__/integration/auth.test.ts",
+        "frontend/e2e/auth.spec.ts"
+      ]
+    },
+    "products": {
+      "tests": [
+        "backend/__tests__/unit/services/product.test.ts",
+        "backend/__tests__/integration/products.test.ts",
+        "frontend/e2e/products.spec.ts"
+      ]
+    },
+    "cart": {
+      "tests": [
+        "backend/__tests__/unit/services/cart.test.ts",
+        "backend/__tests__/integration/cart.test.ts",
+        "frontend/e2e/cart.spec.ts"
+      ]
+    },
+    "orders": {
+      "tests": [
+        "backend/__tests__/integration/orders.test.ts",
+        "frontend/e2e/orders.spec.ts"
+      ]
+    },
+    "checkout": {
+      "tests": [
+        "frontend/e2e/checkout.spec.ts"
+      ]
+    },
+    "admin": {
+      "tests": [
+        "backend/__tests__/integration/admin.test.ts",
+        "frontend/e2e/admin.spec.ts"
+      ]
+    },
+    "seo": {
+      "tests": [
+        "frontend/e2e/seo.spec.ts"
+      ]
+    },
+    "responsive": {
+      "tests": [
+        "frontend/e2e/responsive.spec.ts"
+      ]
+    }
+  }
+}

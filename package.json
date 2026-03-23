@@ -1,0 +1,15 @@
+{
+  "name": "pyra-wood",
+  "private": true,
+  "scripts": {
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "test:backend": "cd backend && npm test",
+    "test:backend:unit": "cd backend && npm run test:unit",
+    "test:backend:integration": "cd backend && npm run test:integration",
+    "test:frontend": "cd frontend && npm test",
+    "test:e2e": "cd frontend && npx playwright test",
+    "test:regression": "bash tests/run-regression.sh"
+  }
+}
