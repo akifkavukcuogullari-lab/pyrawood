@@ -1,7 +1,6 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import Link from 'next/link';
 import { ShoppingBag } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -9,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { StarRating } from '@/components/reviews/StarRating';
 import { useCartStore } from '@/store/cart-store';
-import { cn, formatCurrency } from '@/lib/utils';
+import { cn, formatCurrency, resolveImageUrl } from '@/lib/utils';
 import type { Product } from '@/lib/types';
 
 interface ProductCardProps {
@@ -41,12 +40,11 @@ export function ProductCard({ product, className }: ProductCardProps) {
       <Link href={`/products/${product.slug}`} className="block">
         <Card className="group overflow-hidden border-pyra-sand bg-pyra-cream/50 transition-shadow duration-300 hover:shadow-lg">
           <div className="relative aspect-square overflow-hidden">
-            <Image
-              src={primaryImage?.url || '/images/placeholder.jpg'}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={resolveImageUrl(primaryImage?.url)}
               alt={primaryImage?.altText || product.name}
-              fill
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
-              sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+              className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
             {hasDiscount && (
               <Badge className="absolute top-3 left-3 bg-pyra-gold text-white">

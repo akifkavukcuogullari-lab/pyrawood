@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { AdminService } from '../services/admin.service';
+import { ProductService } from '../services/product.service';
 
 export const AdminController = {
   // ── Dashboard ──────────────────────────────────────────────────────
@@ -19,6 +20,15 @@ export const AdminController = {
     try {
       const { products, pagination } = await AdminService.listProducts(req.query as any);
       res.status(200).json({ success: true, data: products, pagination });
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async getProduct(req: Request, res: Response, next: NextFunction) {
+    try {
+      const product = await ProductService.getById(req.params.id);
+      res.status(200).json({ success: true, data: product });
     } catch (error) {
       next(error);
     }

@@ -39,6 +39,12 @@ export const ENDPOINTS = {
       CREATE: '/admin/products',
       UPDATE: (id: string) => `/admin/products/${id}`,
       DELETE: (id: string) => `/admin/products/${id}`,
+      UPLOAD_IMAGE: (id: string) => `/admin/products/${id}/images`,
+      UPDATE_IMAGE: (id: string, imgId: string) => `/admin/products/${id}/images/${imgId}`,
+      DELETE_IMAGE: (id: string, imgId: string) => `/admin/products/${id}/images/${imgId}`,
+      ADD_VARIANT: (id: string) => `/admin/products/${id}/variants`,
+      UPDATE_VARIANT: (id: string, varId: string) => `/admin/products/${id}/variants/${varId}`,
+      DELETE_VARIANT: (id: string, varId: string) => `/admin/products/${id}/variants/${varId}`,
     },
     ORDERS: {
       LIST: '/admin/orders',

@@ -3,8 +3,9 @@
 import { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { apiGet, apiPut } from '@/lib/api';
+import { apiGet, apiPut, apiDelete } from '@/lib/api';
 import { ENDPOINTS } from '@/lib/api-contract';
+import { getToken } from '@/lib/auth';
 import type { Product, Category } from '@/lib/types';
 import { ProductForm } from '@/components/admin/ProductForm';
 import { ImageUploader } from '@/components/admin/ImageUploader';
@@ -85,6 +86,7 @@ export default function AdminEditProductPage({
   async function handleSubmit(data: Record<string, unknown>) {
     setIsSubmitting(true);
     try {
+      // 1. Update product data + variants
       const payload = {
         ...data,
         variants: variants
@@ -101,8 +103,45 @@ export default function AdminEditProductPage({
             ),
           })),
       };
-
       await apiPut(ENDPOINTS.ADMIN.PRODUCTS.UPDATE(id), payload);
+
+      // 2. Upload new images (those with a file)
+      const newImages = images.filter((img) => img.file);
+      const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+      const token = getToken();
+
+      for (const img of newImages) {
+        const formData = new FormData();
+        formData.append('image', img.file!);
+        formData.append('isPrimary', String(img.isPrimary));
+
+        await fetch(`${apiBase}/admin/products/${id}/images`, {
+          method: 'POST',
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+          body: formData,
+        });
+      }
+
+      // 3. Update isPrimary for existing images
+      const existingImages = images.filter((img) => !img.file && !img.id.startsWith('temp-'));
+      for (const img of existingImages) {
+        const original = product?.images?.find((o) => o.id === img.id);
+        if (original && original.isPrimary !== img.isPrimary) {
+          await apiPut(ENDPOINTS.ADMIN.PRODUCTS.UPDATE_IMAGE(id, img.id), {
+            isPrimary: img.isPrimary,
+          });
+        }
+      }
+
+      // 4. Delete removed images (images that were in the original product but not in current state)
+      const currentImageIds = new Set(images.map((img) => img.id));
+      const originalImages = product?.images ?? [];
+      for (const orig of originalImages) {
+        if (!currentImageIds.has(orig.id)) {
+          await apiDelete(ENDPOINTS.ADMIN.PRODUCTS.DELETE_IMAGE(id, orig.id));
+        }
+      }
+
       toast.success('Product updated successfully');
       router.push('/admin/products');
     } catch (err) {

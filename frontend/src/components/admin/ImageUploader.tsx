@@ -1,10 +1,9 @@
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
-import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { cn, resolveImageUrl } from '@/lib/utils';
 import { Upload, X, ImageIcon, Check } from 'lucide-react';
 
 interface UploadedImage {
@@ -132,12 +131,11 @@ export function ImageUploader({ images, onChange }: ImageUploaderProps) {
                     : 'border-transparent hover:border-border'
                 )}
               >
-                <Image
-                  src={img.url}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={img.file ? img.url : resolveImageUrl(img.url)}
                   alt="Product"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 50vw, 25vw"
+                  className="absolute inset-0 h-full w-full object-cover"
                 />
 
                 {/* Overlay controls */}

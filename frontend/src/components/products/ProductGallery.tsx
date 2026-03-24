@@ -1,9 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { cn } from '@/lib/utils';
+import { cn, resolveImageUrl } from '@/lib/utils';
 import type { ProductImage } from '@/lib/types';
 
 interface ProductGalleryProps {
@@ -53,13 +52,12 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
             transition={{ duration: 0.25 }}
             className="relative h-full w-full"
           >
-            <Image
-              src={currentImage.url}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={resolveImageUrl(currentImage.url)}
               alt={currentImage.altText || productName}
-              fill
-              priority
               className={cn(
-                'object-cover transition-transform duration-200',
+                'absolute inset-0 h-full w-full object-cover transition-transform duration-200',
                 isZoomed && 'scale-150'
               )}
               style={
@@ -87,12 +85,11 @@ export function ProductGallery({ images, productName }: ProductGalleryProps) {
                   : 'border-transparent opacity-70 hover:opacity-100'
               )}
             >
-              <Image
-                src={image.url}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={resolveImageUrl(image.url)}
                 alt={image.altText || `${productName} thumbnail ${index + 1}`}
-                fill
-                className="object-cover"
-                sizes="80px"
+                className="absolute inset-0 h-full w-full object-cover"
               />
             </button>
           ))}

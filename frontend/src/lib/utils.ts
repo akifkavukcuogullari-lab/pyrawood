@@ -34,3 +34,17 @@ export function truncate(str: string, length: number): string {
   if (str.length <= length) return str;
   return str.slice(0, length).trimEnd() + '...';
 }
+
+/**
+ * Resolve an image URL — if it's a relative path (e.g. /uploads/...),
+ * prepend the API base URL so next/image can load it.
+ */
+export function resolveImageUrl(url: string | undefined | null): string {
+  if (!url) return '/images/placeholder.jpg';
+  // Already a full URL
+  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  // Relative path — prepend API base (without /api)
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+  const baseUrl = apiUrl.replace(/\/api\/?$/, '');
+  return `${baseUrl}${url}`;
+}

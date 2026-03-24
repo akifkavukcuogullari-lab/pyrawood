@@ -63,6 +63,7 @@ router.get('/stats', AdminController.getStats);
 
 // Products
 router.get('/products', validate(paginationQuerySchema), AdminController.listProducts);
+router.get('/products/:id', validate(productIdParamSchema), AdminController.getProduct);
 router.post('/products', validate(createProductSchema), AdminController.createProduct);
 router.put('/products/:id', validate(updateProductSchema), AdminController.updateProduct);
 router.delete('/products/:id', validate(productIdParamSchema), AdminController.deleteProduct);

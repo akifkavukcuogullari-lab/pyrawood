@@ -2,11 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { apiGetPaginated, apiDelete } from '@/lib/api';
 import { ENDPOINTS } from '@/lib/api-contract';
-import { formatCurrency } from '@/lib/utils';
+import { formatCurrency, resolveImageUrl } from '@/lib/utils';
 import type { Product } from '@/lib/types';
 import { DataTable, type Column } from '@/components/admin/DataTable';
 import { Badge } from '@/components/ui/badge';
@@ -75,12 +74,11 @@ export default function AdminProductsPage() {
       render: (product) => (
         <div className="relative size-10 rounded overflow-hidden bg-muted">
           {product.images?.[0] ? (
-            <Image
-              src={product.images[0].url}
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              src={resolveImageUrl(product.images[0].url)}
               alt={product.images[0].altText ?? product.name}
-              fill
-              className="object-cover"
-              sizes="40px"
+              className="absolute inset-0 h-full w-full object-cover"
             />
           ) : (
             <div className="flex size-full items-center justify-center text-xs text-muted-foreground">

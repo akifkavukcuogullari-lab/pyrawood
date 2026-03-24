@@ -276,6 +276,30 @@ export const ProductModel = {
     const dataResult = await query<ProductRow>(dataSql, dataValues);
     const products = dataResult.rows.map(mapToProduct);
 
+    // Batch-fetch images for all returned products
+    if (products.length > 0) {
+      const productIds = products.map((p) => p.id);
+      const imgResult = await query<ImageRow>(
+        `SELECT id, product_id, url, alt_text, sort_order, is_primary
+         FROM product_images
+         WHERE product_id = ANY($1)
+         ORDER BY sort_order ASC`,
+        [productIds]
+      );
+
+      const imagesByProduct = new Map<string, MappedImage[]>();
+      for (const row of imgResult.rows) {
+        const mapped = mapToImage(row);
+        const list = imagesByProduct.get(row.product_id) || [];
+        list.push(mapped);
+        imagesByProduct.set(row.product_id, list);
+      }
+
+      for (const product of products) {
+        product.images = imagesByProduct.get(product.id) || [];
+      }
+    }
+
     return { products, total };
   },
 
