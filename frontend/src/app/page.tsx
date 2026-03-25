@@ -98,7 +98,7 @@ export default function HomePage() {
               <Button
                 size="lg"
                 variant="outline"
-                className="border-pyra-cream/30 text-pyra-cream hover:bg-pyra-cream/10"
+                className="border-pyra-walnut text-pyra-walnut hover:bg-pyra-walnut/10"
                 render={<Link href="#story" />}
               >
                 Our Story
