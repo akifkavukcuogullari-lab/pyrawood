@@ -17,7 +17,7 @@ app.use(helmet({
 app.use(
   cors({
     origin: process.env.NODE_ENV === 'production'
-      ? process.env.FRONTEND_URL || 'http://localhost:3000'
+      ? [process.env.FRONTEND_URL || 'http://localhost:3000', 'https://pyrawood.vercel.app']
       : ['http://localhost:3000', 'http://localhost:3002', 'http://localhost:3001'],
     credentials: true,
   })

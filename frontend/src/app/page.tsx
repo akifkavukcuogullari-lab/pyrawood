@@ -23,12 +23,12 @@ const staggerContainer = {
 };
 
 const CATEGORY_ICONS: Record<string, string> = {
-  'living-room': '/images/categories/living-room.jpg',
-  'dining': '/images/categories/dining.jpg',
-  'bedroom': '/images/categories/bedroom.jpg',
-  'office': '/images/categories/office.jpg',
-  'outdoor': '/images/categories/outdoor.jpg',
-  'decor': '/images/categories/decor.jpg',
+  'living-room': 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&h=600&fit=crop',
+  'dining': 'https://images.unsplash.com/photo-1617806118233-18e1de247200?w=800&h=600&fit=crop',
+  'bedroom': 'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=800&h=600&fit=crop',
+  'office': 'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=800&h=600&fit=crop',
+  'outdoor': 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?w=800&h=600&fit=crop',
+  'decor': 'https://images.unsplash.com/photo-1513519245088-0e12902e35ca?w=800&h=600&fit=crop',
 };
 
 const TRUST_ITEMS = [
@@ -171,12 +171,11 @@ export default function HomePage() {
                 <Link href={`/categories/${category.slug}`} className="group block">
                   <Card className="relative overflow-hidden border-pyra-sand bg-pyra-sand transition-shadow duration-300 hover:shadow-xl">
                     <div className="relative aspect-[4/3]">
-                      <Image
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
                         src={CATEGORY_ICONS[category.slug] || '/images/placeholder.jpg'}
                         alt={category.name}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        sizes="(max-width: 768px) 50vw, 33vw"
+                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-pyra-walnut/80 via-pyra-walnut/20 to-transparent" />
                       <div className="absolute inset-x-0 bottom-0 p-5">
